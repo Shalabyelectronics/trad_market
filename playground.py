@@ -55,9 +55,9 @@ def request_news_data(search_word, data):
     new_data = {}
     news_api = NewsApiClient(NEWS_API_KEY)
     stock_daily_data = pandas.DataFrame(data)
-    dates = stock_daily_data.columns
-    news_data = news_api.get_everything(q=f'{search_word}', language='en', page=1, page_size=5,
-                                        from_param=f"{dates[0]}")
+    yesterday_date = stock_daily_data.columns[0]
+    news_data = news_api.get_everything(qintitle=f'{search_word}', language='en', page=1, page_size=5,
+                                        from_param=f"{yesterday_date}")
     news_number = 1
     for title in news_data['articles'][:3]:
         new_data = {
