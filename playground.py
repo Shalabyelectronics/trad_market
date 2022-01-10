@@ -41,9 +41,9 @@ def request_stock_data(stock_name):
 def close_stock_price(stock_data: dict) -> float:
     stock_daily_data = pandas.DataFrame(stock_data)
     dates = stock_daily_data.columns
-    yesterday_close = float(stock_daily_data.loc['4. close', dates[1]])
-    before_yesterday = float(stock_daily_data.loc['4. close', dates[2]])
-    return round(before_yesterday - yesterday_close, 2)
+    yesterday_close_price = float(stock_daily_data.loc['4. close', dates[0]])
+    before_yesterday_price = float(stock_daily_data.loc['4. close', dates[1]])
+    return abs(round(yesterday_close_price - before_yesterday_price, 2))
 
 
 # Third Check if the price increase/drop by 5% if so request news
