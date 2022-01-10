@@ -12,7 +12,8 @@ ALPH_API_KEY = os.environ.get("STOCK_API_KEY")
 NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
 SENDER_PASS = os.environ.get("SENDER_PASS")
-RECIPIENT_EMAIL = "tsending4@gmail.com"
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
+# Add your email smtp server and port
 SMTP_SERVER = ("smtp.gmail.com", 465)
 
 
@@ -40,12 +41,7 @@ def close_stock_price(stock_data: dict) -> float:
     return round(before_yesterday - yesterday_close, 2)
 
 
-# with open("tesla_stok.json", "r") as daily_stock:
-#     data = json.load(daily_stock)
-# print(close_stock_price('2022-01-05', data))
-
-# Bug KeyError: '2022-01-00'
-# Thired Check if the price increase/drop by 5% if so request news
+# Third Check if the price increase/drop by 5% if so request news
 
 def request_news_data(search_word, data):
     news = []
@@ -110,7 +106,7 @@ def send_stock_email(subject, content):
         print("Message sent")
 
 
-# main function will combining all function to create and send the message:
+# main function will combines all function to create and send the message:
 def stock_alert_app(stock, company_name):
     # Step 1 request stock data
     data = request_stock_data(stock)

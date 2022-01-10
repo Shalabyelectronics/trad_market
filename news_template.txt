@@ -1,0 +1,3 @@
+[COMPANY_NAME]: [STOCK_STATUS]
+Headline: [HEADLINE]
+Brief: [BRIEF]
