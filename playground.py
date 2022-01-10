@@ -8,11 +8,11 @@ from email.message import EmailMessage
 
 STOCK = "AAPL"
 COMPANY_NAME = "Apple Inc"
-ALPH_API_KEY = os.environ.get("STOCK_API_KEY")
+ALPHA_API_KEY = os.environ.get("STOCK_API_KEY")
 NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
 SENDER_PASS = os.environ.get("SENDER_PASS")
-RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL")
+RECIPIENT_EMAIL = os.environ.get("SENDER_EMAIL")
 # Add your email smtp server and port
 SMTP_SERVER = ("smtp.gmail.com", 465)
 
@@ -22,8 +22,13 @@ SMTP_SERVER = ("smtp.gmail.com", 465)
 
 # First request Stock data
 def request_stock_data(stock_name):
-    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={stock_name}&apikey={ALPH_API_KEY}'
-    r = requests.get(url)
+    parameters = {
+        'function': 'TIME_SERIES_DAILY',
+        'symbol': stock_name,
+        'apikey': ALPHA_API_KEY
+    }
+    url = f'https://www.alphavantage.co/query'
+    r = requests.get(url, params=parameters)
     data = r.json()
     with open(f'{stock_name}_stock.json', 'w') as daily_stock:
         json.dump(data, daily_stock, indent=4)
