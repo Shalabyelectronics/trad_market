@@ -38,12 +38,14 @@ def request_stock_data(stock_name):
 
 
 # Second compare between the close price for yesterday and day before yesterday
-def close_stock_price(stock_data: dict) -> float:
+def close_stock_price(stock_data: dict) -> list:
     stock_daily_data = pandas.DataFrame(stock_data)
     dates = stock_daily_data.columns
     yesterday_close_price = float(stock_daily_data.loc['4. close', dates[0]])
     before_yesterday_price = float(stock_daily_data.loc['4. close', dates[1]])
-    return abs(round(yesterday_close_price - before_yesterday_price, 2))
+    diff_price = round(yesterday_close_price - before_yesterday_price, 2)
+    yesterday_diff_price = [diff_price, yesterday_close_price]
+    return yesterday_diff_price
 
 
 # Third Check if the price increase/drop by 5% if so request news
@@ -120,13 +122,16 @@ def stock_alert_app(stock, company_name):
     # Step 3 Check if price increase or drop between 5% and in both request news
     # load first day on stock daily
     news_data = request_news_data(company_name, data)
-    if stock_price <= -0.05:
-        stock_percentage = '🔻' + str(stock_price) + '%'
+    diff_close_price = abs(stock_price[0])
+    yesterday_close_price = stock_price[1]
+    diff_percentage = round(diff_close_price / yesterday_close_price, 3) * 100
+    if diff_close_price <= -0.05:
+        stock_percentage = '🔻' + str(diff_percentage) + '%'
         # create a message
         content_msg = create_message(company_name, stock_percentage, news_data)
         send_stock_email(f"{company_name} Stock status", content_msg)
-    elif stock_price >= 0.05:
-        stock_percentage = '🔺' + str(stock_price) + '%'
+    elif diff_close_price >= 0.05:
+        stock_percentage = '🔺' + str(diff_percentage) + '%'
         content_msg = create_message(company_name, stock_percentage, news_data)
         send_stock_email(f"{company_name} Stock status", content_msg)
 
